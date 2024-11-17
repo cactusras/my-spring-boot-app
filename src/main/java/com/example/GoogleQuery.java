@@ -17,9 +17,9 @@ import org.jsoup.select.Elements;
 
 public class GoogleQuery 
 {
-    public String searchKeyword;
-    public String url;
-    public String content;
+    public String searchKeyword;//user input
+    public String url;//search query
+    public String content;//google search result page html
 
     public GoogleQuery(String searchKeyword)
     {
@@ -125,4 +125,7 @@ public class GoogleQuery
 
         return retVal;
     }
+    
+    
+    
 }
