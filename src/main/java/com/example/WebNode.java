@@ -1,5 +1,6 @@
 package com.example;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class WebNode
@@ -15,7 +16,7 @@ public class WebNode
 		this.children = new ArrayList<WebNode>();
 	}
 
-	public void setNodeScore(ArrayList<Keyword> keywords) throws IOException{
+	public void setNodeScore(ArrayList<Keyword> keywords) throws IOException, URISyntaxException{
 		// YOUR TURN
 		// 2. calculate the score of this node
 		// this method should be called in post-order mode

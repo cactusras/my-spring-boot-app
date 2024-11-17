@@ -1,5 +1,7 @@
 package com.example;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,7 +26,7 @@ public class WebTree{
         this.root = new WebNode(rootPage);
 
         // Step 3: Build the web tree by fetching subpages recursively
-        buildTree(this.root, 2); // Limit depth to prevent infinite loops
+//        buildTree(this.root, 2); // Limit depth to prevent infinite loops
     }
 
     private void buildTree(WebNode currentNode, int depth) throws IOException {
@@ -78,18 +80,19 @@ public class WebTree{
     // Extract a human-readable page name from a URL
     private String extractPageName(String url) {
         try {
-            return new URL(url).getPath().replace("/", "").replace("-", " ").trim();
+            return new URI(url).toURL().getPath().replace("/", "").replace("-", " ").trim();
         } catch (Exception e) {
+        	e.printStackTrace();
             return url; // Fallback to URL if name extraction fails
         }
     }
 	
 
-	public void setPostOrderScore(ArrayList<Keyword> keywords) throws IOException{
+	public void setPostOrderScore(ArrayList<Keyword> keywords) throws IOException, URISyntaxException{
 		setPostOrderScore(root, keywords);
 	}
 
-	private void setPostOrderScore(WebNode startNode, ArrayList<Keyword> keywords) throws IOException{
+	private void setPostOrderScore(WebNode startNode, ArrayList<Keyword> keywords) throws IOException, URISyntaxException{
 		// YOUR TURN
 		// 3. compute the score of children nodes via post-order, then setNodeScore for
 		// startNode
@@ -144,6 +147,18 @@ public class WebTree{
 	        System.out.print("\n" + repeat("\t", nodeDepth - 2));
 	    }
 		
+	}
+	
+	public double getRootScore() {
+	    return this.root.nodeScore;
+	}
+	
+	public String getUrl() {
+	    return this.root.webPage.url;
+	}
+	
+	public String getName() {
+		return this.root.webPage.name;
 	}
 
 	private String repeat(String str, int repeat){

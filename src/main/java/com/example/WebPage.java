@@ -1,5 +1,6 @@
 package com.example;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class WebPage{
@@ -14,7 +15,7 @@ public class WebPage{
 		this.counter = new WordCounter(url);
 	}
 
-	public void setScore(ArrayList<Keyword> keywords) throws IOException{
+	public void setScore(ArrayList<Keyword> keywords) throws IOException, URISyntaxException{
 		score = 0;
 		// YOUR TURN
 		// 1. calculate the score of this webPage
