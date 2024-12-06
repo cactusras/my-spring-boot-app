@@ -16,7 +16,7 @@ import org.jsoup.select.Elements;
 public class WebTree{
 	public WebNode root;
 
-	public WebTree(WebPage rootPage){
+	public WebTree(WebPage rootPage){//can delete??
 		this.root = new WebNode(rootPage);
 	}
 	
@@ -103,7 +103,7 @@ public class WebTree{
 	    startNode.setNodeScore(keywords); // Compute score of the current node
 	}
 
-	public void eularPrintTree(){
+	public void eularPrintTree(){//can delete??
 		eularPrintTree(root);
 	}
 

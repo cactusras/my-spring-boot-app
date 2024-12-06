@@ -23,6 +23,8 @@ public class GoogleQueryController {
 //        	score formula construction
         	ArrayList<Keyword> keywordForSorting = new ArrayList<Keyword>();
             keywordForSorting.add(new Keyword("restaurant", 10));
+            keywordForSorting.add(new Keyword("餐廳", 10));
+            keywordForSorting.add(new Keyword("推薦", 10));
             keywordForSorting.add(new Keyword("recommend", 5));
 //        	webpages and its subpages forms a web tree
         	List<WebTree> webTrees = new ArrayList<>();

@@ -105,7 +105,11 @@
 	            return;
 	        }
 
-	        fetch(`/api/search?keyword=${keyword}`)
+			// Append "餐廳" to the keyword
+			const modifiedKeyword = `${keyword} 餐廳`;
+
+			// Make the API call with the modified keyword
+			fetch(`/api/search?keyword=${encodeURIComponent(modifiedKeyword)}`)
 	            .then(response => {
 	                if (!response.ok) {
 	                    throw new Error('Network response was not ok');
