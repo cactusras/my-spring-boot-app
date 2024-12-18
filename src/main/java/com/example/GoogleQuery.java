@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -165,7 +167,7 @@ public class GoogleQuery
     	                retVal.put(title, accessibleUrl);
     	            }
     	        } else {
-    	            System.out.println("Skipped inaccessible URL: " + rawUrl);
+//    	            System.out.println("Skipped inaccessible URL: " + rawUrl);
     	        }
 
     	    } catch (IndexOutOfBoundsException e) {
@@ -180,52 +182,36 @@ public class GoogleQuery
     
     private String isURLAccessible(String url) {
         try {
-//            // Step 1: Normalize the URL by ensuring proper encoding
-//            url = url.replaceAll("&", "%26");
+            // Step 1: Decode the URL twice to handle double encoding
+            String decodedUrl = URLDecoder.decode(url, StandardCharsets.UTF_8.name());
+            decodedUrl = URLDecoder.decode(decodedUrl, StandardCharsets.UTF_8.name());
 
-            // Step 2: Parse the URL
-//            URI uri = new URI(url);
-
-            if (url.contains("&")) {
-                url = url.substring(0, url.indexOf("&")); // Remove additional parameters
-                
+            // Step 2: Remove unnecessary parameters (e.g., after "&")
+            if (decodedUrl.contains("&")) {
+                decodedUrl = decodedUrl.substring(0, decodedUrl.indexOf("&")); // Extract base URL
             }
-            
-//            // Extract components
-//            String scheme = uri.getScheme();
-//            String host = uri.getHost();
-//            String path = uri.getPath();
-//            String query = uri.getQuery();
-//
-//            // Reconstruct the URL
-//            String baseUrl = scheme + "://" + host + path;
-//            if (query != null && !query.isEmpty()) {
-//                baseUrl += "?" + query;
-//            }
-//
-//            // Optional: Debugging output
-//            System.out.println("Base host: " + host);
-//            System.out.println("Base path: " + path);
-//            System.out.println("Base query: " + query);
-//            System.out.println("Reconstructed URL: " + baseUrl);
 
-            // Step 3: Check accessibility
-            URL cleanedUrl = new URI(url).toURL();
+            // Step 3: Convert the cleaned URL string into a URI and then a URL
+            URL cleanedUrl = new URI(decodedUrl).toURL();
+
+            // Step 4: Check accessibility
             URLConnection conn = cleanedUrl.openConnection();
             conn.setRequestProperty("User-agent", "Chrome/107.0.5304.107");
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
             conn.connect();
 
-            // Step 4: Verify HTTP response status
+            // Step 5: Verify HTTP response status
             if (conn instanceof java.net.HttpURLConnection) {
                 java.net.HttpURLConnection httpConn = (java.net.HttpURLConnection) conn;
                 int responseCode = httpConn.getResponseCode();
+                System.out.println("response code: " + responseCode);
                 if (responseCode >= 200 && responseCode < 400) {
-                    return cleanedUrl.toString();
+                    return cleanedUrl.toString(); // Return the accessible URL
                 }
             }
-
+            
+            System.out.println("Skipped inaccessible URL: " + decodedUrl);
             return null; // URL is inaccessible
 
         } catch (Exception e) {
@@ -234,6 +220,7 @@ public class GoogleQuery
             return null;
         }
     }
+
 
 
     
