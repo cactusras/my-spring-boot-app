@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -129,7 +130,7 @@ public class GoogleQuery
 //        return retVal;
 //    }
 
-    public HashMap<String, String> query() throws IOException
+    public LinkedHashMap<String, String> query() throws IOException
     {
         
         /* 
@@ -141,7 +142,7 @@ public class GoogleQuery
     	    content = fetchContent();
     	}
 
-    	HashMap<String, String> retVal = new HashMap<>();
+    	LinkedHashMap<String, String> retVal = new LinkedHashMap<>();
     	Document doc = Jsoup.parse(content);
     	Elements lis = doc.select("div").select(".kCrYT");
 

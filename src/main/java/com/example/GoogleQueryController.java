@@ -6,19 +6,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 //import java.util.Map;
-import java.util.Map;
+
 
 @RestController
 public class GoogleQueryController {
 
     @GetMapping("/api/search")
-    public HashMap<String, String> search(@RequestParam String keyword) {
-        HashMap<String, String> response = new HashMap<>();
+    public LinkedHashMap<String, String> search(@RequestParam String keyword) {
+        LinkedHashMap<String, String> response = new LinkedHashMap<>();
         try {
 //        	score formula construction
         	ArrayList<Keyword> keywordForSorting = new ArrayList<Keyword>();
@@ -46,7 +43,7 @@ public class GoogleQueryController {
             for (WebTree webTree : webTrees) {
                 response.put(webTree.getName(), webTree.getUrl());
             }
-            
+
         } catch (IOException e) {
         	e.printStackTrace();
             response.put("error", "Error fetching search results.");
