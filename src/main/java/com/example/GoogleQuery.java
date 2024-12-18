@@ -38,7 +38,7 @@ public class GoogleQuery
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("google_query_constructor"+e.getMessage());
         }
     }
 
@@ -64,68 +64,177 @@ public class GoogleQuery
 	        return retVal;
     	} catch (URISyntaxException e) {
 			e.printStackTrace();
+			System.out.println("google_query_fetchContent");
 			return e.toString();
 		}
     }
+    
+//    public HashMap<String, String> query() throws IOException
+//    {
+//        if(content == null)
+//        {
+//            content = fetchContent();
+//        }
+//
+//        HashMap<String, String> retVal = new HashMap<String, String>();
+//
+//        /* 
+//         * some Jsoup source
+//         * https://jsoup.org/apidocs/org/jsoup/nodes/package-summary.html
+//         * https://www.1ju.org/jsoup/jsoup-quick-start
+//         */
+//
+//        //using Jsoup analyze html string
+//        Document doc = Jsoup.parse(content);
+//
+//        //select particular element(tag) which you want 
+//        Elements lis = doc.select("div");
+//        lis = lis.select(".kCrYT");
+//
+//        for(Element li : lis)
+//        {
+//            try 
+//            {
+//            	Elements aTags = li.select("a");
+//                if (aTags.isEmpty()) {
+//                    continue; // Skip if there are no <a> tags
+//                }
+//                
+//                String citeUrl = aTags.get(0).attr("href").replace("/url?q=", "");
+//                
+//                Elements titleElements = aTags.get(0).select(".vvjwJb");
+//                if (titleElements.isEmpty()) {
+//                    continue; // Skip if there are no titles
+//                }
+//                
+//                String title = titleElements.text();
+//
+//                if (title.equals("")) {
+//                    continue; // Skip if title is empty
+//                }
+//
+//                System.out.println("Title: " + title + " , url: " + citeUrl);
+//
+//                // Put title and URL pair into HashMap
+//                retVal.put(title, citeUrl);
+//
+//            } catch (IndexOutOfBoundsException e) 
+//            {
+//				e.printStackTrace();
+//            }
+//        }
+//
+//        return retVal;
+//    }
 
     public HashMap<String, String> query() throws IOException
     {
-        if(content == null)
-        {
-            content = fetchContent();
-        }
-
-        HashMap<String, String> retVal = new HashMap<String, String>();
-
+        
         /* 
          * some Jsoup source
          * https://jsoup.org/apidocs/org/jsoup/nodes/package-summary.html
          * https://www.1ju.org/jsoup/jsoup-quick-start
          */
+    	if (content == null) {
+    	    content = fetchContent();
+    	}
 
-        //using Jsoup analyze html string
-        Document doc = Jsoup.parse(content);
+    	HashMap<String, String> retVal = new HashMap<>();
+    	Document doc = Jsoup.parse(content);
+    	Elements lis = doc.select("div").select(".kCrYT");
 
-        //select particular element(tag) which you want 
-        Elements lis = doc.select("div");
-        lis = lis.select(".kCrYT");
+    	for (Element li : lis) {
+    	    try {
+    	        Elements aTags = li.select("a");
+    	        if (aTags.isEmpty()) {
+    	            continue; // Skip if there are no <a> tags
+    	        }
 
-        for(Element li : lis)
-        {
-            try 
-            {
-            	Elements aTags = li.select("a");
-                if (aTags.isEmpty()) {
-                    continue; // Skip if there are no <a> tags
-                }
-                
-                String citeUrl = aTags.get(0).attr("href").replace("/url?q=", "");
-                
-                Elements titleElements = aTags.get(0).select(".vvjwJb");
-                if (titleElements.isEmpty()) {
-                    continue; // Skip if there are no titles
-                }
-                
-                String title = titleElements.text();
+    	        String rawUrl = aTags.get(0).attr("href").replace("/url?q=", "");
+    	        String accessibleUrl = isURLAccessible(rawUrl); // Use the updated method
 
-                if (title.equals("")) {
-                    continue; // Skip if title is empty
-                }
+    	        if (accessibleUrl != null) {
+    	            Elements titleElements = aTags.get(0).select(".vvjwJb");
+    	            if (titleElements.isEmpty()) {
+    	                continue; // Skip if there are no titles
+    	            }
 
-                System.out.println("Title: " + title + " , url: " + citeUrl);
+    	            String title = titleElements.text();
+    	            if (!title.isEmpty()) {
+    	                System.out.println("Accessible URL - Title: " + title + " , url: " + accessibleUrl);
+    	                retVal.put(title, accessibleUrl);
+    	            }
+    	        } else {
+    	            System.out.println("Skipped inaccessible URL: " + rawUrl);
+    	        }
 
-                // Put title and URL pair into HashMap
-                retVal.put(title, citeUrl);
+    	    } catch (IndexOutOfBoundsException e) {
+    	        e.printStackTrace();
+    	        System.out.println("google_query_query");
+    	    }
+    	}
 
-            } catch (IndexOutOfBoundsException e) 
-            {
-				e.printStackTrace();
-            }
-        }
+    	return retVal;
 
-        return retVal;
     }
     
-    
+    private String isURLAccessible(String url) {
+        try {
+//            // Step 1: Normalize the URL by ensuring proper encoding
+//            url = url.replaceAll("&", "%26");
+
+            // Step 2: Parse the URL
+//            URI uri = new URI(url);
+
+            if (url.contains("&")) {
+                url = url.substring(0, url.indexOf("&")); // Remove additional parameters
+                
+            }
+            
+//            // Extract components
+//            String scheme = uri.getScheme();
+//            String host = uri.getHost();
+//            String path = uri.getPath();
+//            String query = uri.getQuery();
+//
+//            // Reconstruct the URL
+//            String baseUrl = scheme + "://" + host + path;
+//            if (query != null && !query.isEmpty()) {
+//                baseUrl += "?" + query;
+//            }
+//
+//            // Optional: Debugging output
+//            System.out.println("Base host: " + host);
+//            System.out.println("Base path: " + path);
+//            System.out.println("Base query: " + query);
+//            System.out.println("Reconstructed URL: " + baseUrl);
+
+            // Step 3: Check accessibility
+            URL cleanedUrl = new URI(url).toURL();
+            URLConnection conn = cleanedUrl.openConnection();
+            conn.setRequestProperty("User-agent", "Chrome/107.0.5304.107");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+            conn.connect();
+
+            // Step 4: Verify HTTP response status
+            if (conn instanceof java.net.HttpURLConnection) {
+                java.net.HttpURLConnection httpConn = (java.net.HttpURLConnection) conn;
+                int responseCode = httpConn.getResponseCode();
+                if (responseCode >= 200 && responseCode < 400) {
+                    return cleanedUrl.toString();
+                }
+            }
+
+            return null; // URL is inaccessible
+
+        } catch (Exception e) {
+            // Handle any exceptions and return null
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     
 }
