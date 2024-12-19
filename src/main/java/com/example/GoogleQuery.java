@@ -191,6 +191,8 @@ public class GoogleQuery
             if (decodedUrl.contains("&")) {
                 decodedUrl = decodedUrl.substring(0, decodedUrl.indexOf("&")); // Extract base URL
             }
+            
+            
 
             // Step 3: Convert the cleaned URL string into a URI and then a URL
             URL cleanedUrl = new URI(decodedUrl).toURL();

@@ -26,6 +26,10 @@ public class WordCounter
 			URL url = new URI(this.urlStr).toURL();
 			System.out.println(urlStr);
 			URLConnection conn = url.openConnection();
+            conn.setRequestProperty("User-agent", "Chrome/107.0.5304.107");
+            conn.setConnectTimeout(10000); // Wait up to 10 seconds for a connection
+            conn.setReadTimeout(15000);    // Wait up to 15 seconds to read data
+            conn.connect();
 			
 	        // Check if the connection is an instance of HttpURLConnection
 	        if (conn instanceof HttpURLConnection) {
@@ -58,6 +62,7 @@ public class WordCounter
 		} catch (IOException e) {
 	        
 	        System.err.println("IOException caught for URL: " + urlStr);
+//	        e.printStackTrace();
 	        return null;
 	    }
 
