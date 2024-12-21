@@ -24,7 +24,7 @@ public class WordCounter
 	{
 		try{
 			URL url = new URI(this.urlStr).toURL();
-			System.out.println(urlStr);
+//			System.out.println(urlStr);
 			URLConnection conn = url.openConnection();
             conn.setRequestProperty("User-agent", "Chrome/107.0.5304.107");
             conn.setConnectTimeout(10000); // Wait up to 10 seconds for a connection
@@ -57,7 +57,8 @@ public class WordCounter
 			return retVal;
 		} catch (FileNotFoundException e) {
             // FileNotFoundException caught - return null
-            System.err.println("File not found at URL: " + urlStr);
+            System.out.println("File not found at URL: " + urlStr);
+//			e.printStackTrace();
             return null;
 		} catch (IOException e) {
 	        

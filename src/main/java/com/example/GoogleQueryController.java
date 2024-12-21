@@ -6,26 +6,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 //import java.util.Map;
-import java.util.Map;
+
 
 @RestController
 public class GoogleQueryController {
 
     @GetMapping("/api/search")
-    public HashMap<String, String> search(@RequestParam String keyword) {
-        HashMap<String, String> response = new HashMap<>();
+    public LinkedHashMap<String, String> search(@RequestParam String keyword) {
+        LinkedHashMap<String, String> response = new LinkedHashMap<>();
         try {
 //        	score formula construction
         	ArrayList<Keyword> keywordForSorting = new ArrayList<Keyword>();
             keywordForSorting.add(new Keyword("restaurant", 10));
             keywordForSorting.add(new Keyword("餐廳", 10));
             keywordForSorting.add(new Keyword("推薦", 10));
-            keywordForSorting.add(new Keyword("recommend", 5));
+            keywordForSorting.add(new Keyword("首選", 10));
+            keywordForSorting.add(new Keyword("最愛", 10));
+            keywordForSorting.add(new Keyword("餐點", 10));
+            keywordForSorting.add(new Keyword("餐", 10));
+            keywordForSorting.add(new Keyword("美味", 10));
+            keywordForSorting.add(new Keyword("recommend", 10));
+            keywordForSorting.add(new Keyword("訂位", 5));
+            keywordForSorting.add(new Keyword("工作", -100));
+            keywordForSorting.add(new Keyword("職缺", -100));
+            
 //        	webpages and its subpages forms a web tree
         	List<WebTree> webTrees = new ArrayList<>();
             GoogleQuery googleQuery = new GoogleQuery(keyword);
@@ -46,7 +52,7 @@ public class GoogleQueryController {
             for (WebTree webTree : webTrees) {
                 response.put(webTree.getName(), webTree.getUrl());
             }
-            
+
         } catch (IOException e) {
         	e.printStackTrace();
             response.put("error", "Error fetching search results.");
