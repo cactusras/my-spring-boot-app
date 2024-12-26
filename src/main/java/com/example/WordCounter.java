@@ -23,6 +23,11 @@ public class WordCounter
 	private String fetchContent() throws IOException, URISyntaxException
 	{
 		try{
+			// Check if the URL ends with a specific file extension (e.g., .jpg, .png, etc.)
+	        if (urlStr.matches(".*\\.(jpg|png|gif|jpeg|bmp|svg|webp|ico)(\\?.*)?$")) {
+	            System.out.println("Skipped URL (file): " + urlStr);
+	            return ""; // Skip connecting to file URLs
+	        }
 			URL url = new URI(this.urlStr).toURL();
 //			System.out.println(urlStr);
 			URLConnection conn = url.openConnection();

@@ -80,7 +80,7 @@ public class WebTree{
                             baseUri.getHost(),
                             decodedHref.startsWith("/") ? decodedHref : "/" + decodedHref,
                             null
-                    ).toString().replace("%23", "#").replace("%3F", "?");
+                    ).toString().replace("%23", "#").replace("%3F", "?").replace(" ", "%20");
                 }
 
                 // Debugging output
@@ -89,7 +89,7 @@ public class WebTree{
 //                System.out.println("full: " + fullUrl);
 
                 // Filter links to include only subpages of the given domain
-                if (fullUrl.startsWith(baseUrl) && !(decodedHref.startsWith("TEL:") || decodedHref.startsWith("/TEL:"))) {
+                if (fullUrl.startsWith(baseUrl) && !(decodedHref.startsWith("TEL:") || decodedHref.startsWith("/TEL:") || decodedHref.startsWith("/tel:"))) {
                     subpages.add(fullUrl);
                 }
             }
@@ -99,7 +99,7 @@ public class WebTree{
         } catch (Exception e) {
             // Handle errors gracefully, such as malformed URLs or inaccessible pages
             System.err.println("Error fetching subpages for URL.");
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
 
