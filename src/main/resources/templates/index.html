@@ -12,6 +12,49 @@
             color: #444;
             overflow-y: auto;
         }
+        .navbar {
+            background: #007BFF;
+            padding: 15px 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: bold;
+            color: #fff;
+            animation: shake 1s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+            33% {
+                transform: translateX(-5px);
+            }
+            70% {
+                transform: translateX(5px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
 
         .container {
             background: #fff;
@@ -25,10 +68,38 @@
         }
 
         h2 {
-            font-size: 24px;
+            font-size: 48px;
+            font-weight: bold;
             margin-bottom: 20px;
             color: #333;
-            font-weight: 600;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite, gradientShift 4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         label {
@@ -97,17 +168,31 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>Restaurant Recommendation System</h2>
-    <h2>Google Search Query</h2>
-
-    <form id="searchForm">
-        <label for="searchKeyword">Enter a keyword:</label>
-        <input type="text" id="searchKeyword" name="keyword" required placeholder="Example: Tomato">
-        <button type="button" onclick="callSearchApi()">Search</button>
-    </form>
-    <p id="apiResult"></p>
+<!-- 導航列 -->
+<div class="navbar">
+    <h1>🍽 餐廳推薦系統</h1>
+    <div>
+        <a href="#searchForm">搜尋</a>
+        <a href="#apiResult">搜尋紀錄</a>
+    </div>
 </div>
+
+<!-- 主內容 -->
+<div class="container">
+    <h2>🔍 Google 餐廳搜尋 🔍</h2>
+    <form id="searchForm">
+        <label for="searchKeyword">請輸入關鍵字：</label>
+        <input type="text" id="searchKeyword" name="keyword" required placeholder="例如：Tomato">
+        <button type="button" onclick="callSearchApi()">立即搜尋</button>
+    </form>
+</div>
+
+<!-- 查詢歷史 -->
+<div class="container">
+    <h2>🕒 查詢結果 🕒</h2>
+    <p id="apiResult">查詢結果將顯示於此處</p>
+</div>
+<!-- 頁尾 -->
 
 <script>
     // 初始化事件綁定
